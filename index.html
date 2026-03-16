@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SpineBase Explorer</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --text: #1e293b;
+            --muted: #64748b;
+            --btn-bg: rgba(255, 255, 255, 0.75); 
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background-color: #f1f5f9;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain; 
+            background-color: #f8fafc;
+        }
+
+        header {
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 1px solid #e2e8f0;
+            z-index: 10;
+        }
+
+        /* Plan Item: Dual-Action Header */
+        .brand-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px 5px 20px;
+        }
+
+        .brand-banner {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .about-link {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
+        }
+
+        .about-link:hover { color: var(--primary); }
+
+        .nav-section {
+            padding: 5px 20px 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 50px;
+        }
+
+        .back-btn {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            display: none;
+            font-size: 13px;
+        }
+
+        .breadcrumb {
+            font-size: 15px;
+            color: var(--muted);
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main.centered { justify-content: center; align-items: center; }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+            max-width: 92%;
+        }
+
+        .menu-item {
+            width: 100%;
+            padding: 26px 20px;
+            background: var(--btn-bg);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+            transition: all 0.2s;
+        }
+
+        .item-card {
+            background: var(--btn-bg);
+            border-radius: 14px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: contain;
+            background: #fff;
+            padding-top: 15px;
+        }
+
+        .item-card .label {
+            padding: 18px;
+            font-weight: 700;
+            font-size: 18px;
+            text-align: center;
+            background: #fff;
+        }
+
+        #content-viewer, .about-content {
+            display: none;
+            background: white;
+            min-height: 100%;
+            padding: 20px;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .about-content h2 { color: var(--primary); margin-top: 0; }
+        .about-content img { width: 100%; height: auto; margin-top: 30px; border-radius: 10px; }
+
+        .status-msg { padding: 40px; text-align: center; font-weight: 600; color: var(--muted); }
+    </style>
+</head>
+<body>
+<div id="app">
+    <header>
+        <div class="brand-row">
+            <div class="brand-banner" onclick="resetToHome()">SpineBase</div>
+            <div class="about-link" onclick="showAboutUs()">About Us</div>
+        </div>
+        <div class="nav-section">
+            <button id="back-btn" class="back-btn" onclick="goBack()">← Back</button>
+            <div id="breadcrumb" class="breadcrumb">A centralized, easy-to-use resource for spine imaging measurements.</div>
+        </div>
+    </header>
+    <main id="view-container" class="centered"></main>
+</div>
+
+<script>
+    const REPO_PATH = "sshlyk/spinebase-public";
+    const RAW_BASE = `https://raw.githubusercontent.com/${REPO_PATH}/refs/heads/main`;
+    const API_BASE = `https://api.github.com/repos/${REPO_PATH}/contents`;
+    
+    const STRUCTURE_URL = `${RAW_BASE}/structure.json`;
+    const BG_URL = `${RAW_BASE}/assets/spine-background.png`;
+    const ABOUT_IMG = `${RAW_BASE}/assets/about-us.png`;
+    const WELCOME_TEXT = "A centralized, easy-to-use resource for spine imaging measurements.";
+
+    const app = document.getElementById('app');
+    const viewContainer = document.getElementById('view-container');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const backBtn = document.getElementById('back-btn');
+
+    let stateStack = [];
+    let initialStructure = null;
+
+    async function init() {
+        app.style.backgroundImage = `url('${BG_URL}')`;
+        try {
+            const res = await fetch(STRUCTURE_URL);
+            initialStructure = await res.json();
+            resetToHome();
+        } catch (e) {
+            viewContainer.innerHTML = `<div class="status-msg">No content yet</div>`;
+        }
+    }
+
+    function resetToHome() {
+        if (!initialStructure) return;
+        stateStack = [];
+        pushState({ data: initialStructure, label: null, type: 'menu' });
+    }
+
+    function pushState(state) {
+        stateStack.push(state);
+        render();
+    }
+
+    function goBack() {
+        if (stateStack.length > 1) {
+            stateStack.pop();
+            render();
+        }
+    }
+
+    function showAboutUs() {
+        pushState({ label: 'About Us', type: 'about' });
+    }
+
+    async function fetchDirectory(path, label) {
+        try {
+            const res = await fetch(`${API_BASE}${path}`);
+            const items = await res.json();
+            const folders = items.filter(i => i.type === 'dir');
+            pushState({ data: folders, label, type: 'grid', basePath: path });
+        } catch (e) {
+            viewContainer.innerHTML = `<div class="status-msg">No content yet</div>`;
+        }
+    }
+
+    function updateNavUI() {
+        const path = stateStack.filter(s => s.label).map(s => s.label);
+        breadcrumb.innerText = path.length > 0 ? path.join(' > ') : WELCOME_TEXT;
+        backBtn.style.display = stateStack.length > 1 ? 'block' : 'none';
+    }
+
+    function render() {
+        const current = stateStack[stateStack.length - 1];
+        updateNavUI();
+        app.style.backgroundImage = (current.type === 'content' || current.type === 'about') ? 'none' : `url('${BG_URL}')`;
+        viewContainer.innerHTML = '';
+        
+        if (current.type === 'menu') {
+            viewContainer.classList.add('centered');
+            const list = document.createElement('div');
+            list.className = 'menu-list';
+            Object.keys(current.data).forEach(key => {
+                const item = current.data[key];
+                const btn = document.createElement('button');
+                btn.className = 'menu-item';
+                btn.innerText = key;
+                btn.onclick = () => item.path ? fetchDirectory(item.path, key) : pushState({ data: item, label: key, type: 'menu' });
+                list.appendChild(btn);
+            });
+            viewContainer.appendChild(list);
+        } else if (current.type === 'grid') {
+            viewContainer.classList.remove('centered');
+            current.data.forEach(folder => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `<img src="${RAW_BASE}${current.basePath}${folder.name}/thumbnail.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%23eee%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2211%22 fill=%22%23999%22>No Preview</text></svg>'"><div class="label">${folder.name.replace(/-/g, ' ')}</div>`;
+                card.onclick = () => loadItem(folder, current.basePath);
+                viewContainer.appendChild(card);
+            });
+        } else if (current.type === 'about') {
+            viewContainer.classList.remove('centered');
+            viewContainer.innerHTML = `
+                <div class="about-content" style="display:block">
+                    <p><strong>SpineBase</strong> was created to solve a frustrating yet widespread problem in spine care and research: despite the critical role of spine imaging measurements across clinical decision-making, academic studies, and surgical planning, there has never been a centralized, easy-to-use resource to guide learners and providers.</p>
+                    <p>Our clinical and research teams are constantly reviewing important spine measurements obtained from X-rays, MRIs, and CTs. Yet, time and again, we see students, residents, and clinicians wasting time digging through scattered publications, inconsistent diagrams, and outdated videos to understand how to measure a simple angle or landmark.</p>
+                    <p><strong>We’re changing that!</strong></p>
+                    <p>SpineBase is your go-to online platform for all spine-related imaging measurements. Whether you're a trainee learning how to measure lumbar lordosis, or a seasoned provider needing a quick reference for T4 Pelvic Angle, we offer step-by-step instructions, annotated images, and walkthroughs -> all in one place.</p>
+                    <p>Our mission is to make imaging measurements simple, standardized, and accessible for everyone in the spine community!</p>
+                    <p><em>Philip Louie, MD</em></p>
+                    <img src="${ABOUT_IMG}" onerror="this.style.display='none'">
+                </div>`;
+            viewContainer.scrollTop = 0;
+        }
+    }
+
+    async function loadItem(item, basePath) {
+        pushState({ label: item.name.replace(/-/g, ' '), type: 'content' });
+        try {
+            const res = await fetch(`${RAW_BASE}${basePath}${item.name}/index.html`);
+            const text = await res.text();
+            const rawUrl = `${RAW_BASE}${basePath}${item.name}/`;
+            const sanitized = text.replace(/src=["'](?:\.\/)?images\/(.*?)["']/g, (m, f) => `src="${rawUrl}images/${f}"`);
+            viewContainer.classList.remove('centered');
+            viewContainer.innerHTML = `<div id="content-viewer" style="display:block">${sanitized}</div>`;
+            viewContainer.scrollTop = 0;
+        } catch (e) {
+            viewContainer.innerHTML = `<div class="status-msg">No content yet</div>`;
+        }
+    }
+
+    init();
+</script>
+</body>
+</html>
