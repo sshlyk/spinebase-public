@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SpineBase Explorer</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -15,7 +14,7 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        /* 1. ALLOW BODY SCROLLING TO ENABLE IOS SAFARI UI AUTO-HIDE */
+        /* 1. ENABLE DOCUMENT SCROLLING FOR IOS SAFARI UI AUTO-HIDE */
         html, body {
             height: 100%;
             margin: 0;
@@ -28,7 +27,7 @@
             width: 100%;
         }
 
-        /* 2. DYNAMIC VIEWPORT HEIGHT (DVH) FOR MOBILE BROWSER COMPATIBILITY */
+        /* 2. DYNAMIC VIEWPORT HEIGHT (DVH) HANDLING */
         #app {
             display: flex;
             flex-direction: column;
@@ -103,12 +102,14 @@
             line-height: 1.3;
         }
 
+        /* MAIN CONTENT AREA */
         main {
             flex-grow: 1;
             padding: 20px;
-            display: block; 
+            display: block; /* Standard block flow allows native body scrolling */
         }
 
+        /* Centering used ONLY for root menu buttons */
         main.centered { 
             display: flex; 
             flex-direction: column; 
@@ -141,6 +142,7 @@
 
         .menu-item:active { transform: scale(0.97); }
 
+        /* ITEM CARDS */
         .item-card {
             background: var(--btn-bg);
             border-radius: 14px;
@@ -150,7 +152,6 @@
             width: 100%;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            flex-shrink: 0;
         }
 
         .item-card img {
@@ -215,11 +216,11 @@
     let stateStack = [];
     let initialStructure = null;
 
-    // HISTORY API: SYNC BROWSER BACK BUTTON
+    // HISTORY API INTEGRATION
     window.onpopstate = function(event) {
         if (stateStack.length > 1) {
             stateStack.pop();
-            render(false); // Render without pushing to history
+            render(false); 
         }
     };
 
@@ -230,7 +231,7 @@
             initialStructure = await res.json();
             resetToHome();
         } catch (e) {
-            viewContainer.innerHTML = `<div class="status-msg">No content yet</div>`;
+            viewContainer.innerHTML = `<div class="status-msg">Loading content...</div>`;
         }
     }
 
@@ -268,7 +269,7 @@
             const folders = items.filter(i => i.type === 'dir');
             pushState({ data: folders, label, type: 'grid', basePath: path });
         } catch (e) {
-            viewContainer.innerHTML = `<div class="status-msg">No content yet</div>`;
+            viewContainer.innerHTML = `<div class="status-msg">No items found in this section.</div>`;
         }
     }
 
@@ -281,9 +282,12 @@
     function render() {
         const current = stateStack[stateStack.length - 1];
         updateNavUI();
+        
+        // Reading Mode Toggle
         app.style.backgroundImage = (current.type === 'content' || current.type === 'about') ? 'none' : `url('${BG_URL}')`;
+        
         viewContainer.innerHTML = '';
-        window.scrollTo(0, 0); // Reset body scroll on view change
+        window.scrollTo(0, 0); // Essential for new view transitions
         
         if (current.type === 'menu') {
             viewContainer.classList.add('centered');
@@ -299,11 +303,14 @@
             });
             viewContainer.appendChild(list);
         } else if (current.type === 'grid') {
-            viewContainer.classList.remove('centered');
+            viewContainer.classList.remove('centered'); 
             current.data.forEach(folder => {
                 const card = document.createElement('div');
                 card.className = 'item-card';
-                card.innerHTML = `<img src="${RAW_BASE}${current.basePath}${folder.name}/thumbnail.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%23eee%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2211%22 fill=%22%23999%22>No Preview</text></svg>'"><div class="label">${folder.name.replace(/-/g, ' ')}</div>`;
+                card.innerHTML = `
+                    <img src="${RAW_BASE}${current.basePath}${folder.name}/thumbnail.png" 
+                         onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%23eee%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2211%22 fill=%22%23999%22>Preview Not Available</text></svg>'">
+                    <div class="label">${folder.name.replace(/-/g, ' ')}</div>`;
                 card.onclick = () => loadItem(folder, current.basePath);
                 viewContainer.appendChild(card);
             });
@@ -311,8 +318,8 @@
             viewContainer.classList.remove('centered');
             viewContainer.innerHTML = `
                 <div class="about-content" style="display:block">
-                    <p><strong>SpineBase</strong> was created to solve a frustrating yet widespread problem in spine care...</p>
-                    <p>Our mission is to make imaging measurements simple, standardized, and accessible for everyone!</p>
+                    <p><strong>SpineBase</strong> provides standardized imaging measurements for clinical and research teams...</p>
+                    <p>Our mission is to make spine care simple and accessible!</p>
                     <p><em>Philip Louie, MD</em></p>
                     <img src="${ABOUT_IMG}" onerror="this.style.display='none'">
                 </div>`;
@@ -325,11 +332,12 @@
             const res = await fetch(`${RAW_BASE}${basePath}${item.name}/index.html`);
             const text = await res.text();
             const rawUrl = `${RAW_BASE}${basePath}${item.name}/`;
+            // Asset Normalization
             const sanitized = text.replace(/src=["'](?:\.\/)?images\/(.*?)["']/g, (m, f) => `src="${rawUrl}images/${f}"`);
             viewContainer.classList.remove('centered');
             viewContainer.innerHTML = `<div id="content-viewer" style="display:block">${sanitized}</div>`;
         } catch (e) {
-            viewContainer.innerHTML = `<div class="status-msg">No content yet</div>`;
+            viewContainer.innerHTML = `<div class="status-msg">Document unavailable.</div>`;
         }
     }
 
