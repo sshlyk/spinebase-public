@@ -4,10 +4,10 @@
        "path":"/resources/cervical/xray/"
      },
     "CT Scan": {
-       "path":"/resources/cervical/ctscan/"
+       "path":"/resources/cervical/ct/"
      },
     "MRI Scan": {
-       "path":"/resources/cervical/mriscan/"
+       "path":"/resources/cervical/mri/"
      }
   },
 
@@ -16,10 +16,10 @@
        "path":"/resources/full/xray/"
      },
     "CT Scan": {
-       "path":"/resources/full/ctscan/"
+       "path":"/resources/full/ct/"
      },
     "MRI Scan": {
-       "path":"/resources/full/mriscan/"
+       "path":"/resources/full/mri/"
      }
   },
 
@@ -28,10 +28,10 @@
        "path":"/resources/lumbar/xray/"
      },
     "CT Scan": {
-       "path":"/resources/lumbar/ctscan/"
+       "path":"/resources/lumbar/ct/"
      },
     "MRI Scan": {
-       "path":"/resources/lumbar/mriscan/"
+       "path":"/resources/lumbar/mri/"
      }
   }
 }
