@@ -1,37 +1,173 @@
 {
   "Cervical Spine": {
     "X-Ray": {
-       "path":"/resources/cervical/xray/"
-     },
+      "path": "/resources/cervical/xray/",
+      "content": [
+        "Spinolaminar line",
+        "Swischuk Line",
+        "Posterior Atlantodental Interval (PADI)",
+        "Interpedicular Distance (IPD)",
+        "Occipital Condyle\u2013C1 Interval (CCI)",
+        "Power\u2019s ratio",
+        "Basion-Dens Interval (BDI)",
+        "C2-C7 Translation",
+        "Cervical C2-7 lordosis",
+        "Atlantodental Interval (ADI)",
+        "C2 Tilt",
+        "Basion-Axial Interval",
+        "Torg-Pavlov Canal-to-Body Ratio",
+        "C2\u2013C7 Coronal Cobb Angle",
+        "Chamberlain\u2019s Line - McGregor\u2019s Line",
+        "Sagittal Vertical Axis (SVA)",
+        "Angulation",
+        "George\u2019s Line (Posterior Cervical Line)",
+        "Sagittal Canal Diameter"
+      ]
+    },
     "CT Scan": {
-       "path":"/resources/cervical/ct/"
-     },
+      "path": "/resources/cervical/ct/",
+      "content": [
+        "Clivo-Axial Angle",
+        "Angulation between Segments",
+        "Grabb-Oakes Measurement (pB - C2 line)",
+        "Translation on Sagittal Reconstruction",
+        "Posterior Atlantodental Interval (PADI)",
+        "Occipital Condyle\u2013C1 Interval (CCI)",
+        "Power\u2019s Ratio",
+        "Facet Joint Step-Off-Dislocation",
+        "Facet Joint Overlap (Percent Overlap Method)",
+        "Basion\u2013Dens Interval (BDI)",
+        "Atlantodental Interval (ADI)",
+        "Basion\u2013Axial Interval (BAI)",
+        "Sagittal Vertical Axis (SVA)"
+      ]
+    },
     "MRI Scan": {
-       "path":"/resources/cervical/mri/"
-     }
+      "path": "/resources/cervical/mri/",
+      "content": [
+        "Pavlov-Torg (Canal-Body Ratio)",
+        "Presence of T1 Hypointensity (chronic myelopathy-atrophy)",
+        "Intramedullary T2 Hyperintensity Length (mm or # of vertebral levels)",
+        "Cross-Sectional Canal Area",
+        "Maximum Spinal Cord Compression",
+        "Compression Ratio (AP diameter  transverse diameter of cord)",
+        "Cord Cross-Sectional Area (CSA)",
+        "Sagittal Canal Diameter"
+      ]
+    }
   },
-
   "Full Spine": {
     "X-Ray": {
-       "path":"/resources/full/xray/"
-     },
+      "path": "/resources/full/xray/",
+      "content": [
+        "Cincinnati-PUMC Classification Systems",
+        "Rib-Pelvis Distance",
+        "Lenke Classification",
+        "Sanders Maturity Score",
+        "SRS\u2013Schwab Classification (2012)",
+        "Traction Films - Push-prone Films",
+        "C2-C7 Sagittal Vertical Axis (cSVA) (cervical contribution)",
+        "SRS-Sagittal Deformity Classification",
+        "Thoracic Kyphosis (T5\u2013T12 Cobb)",
+        "King-Moe Classification",
+        "Risser Sign",
+        "Global Tilt (C7 vertical tilt + pelvic tilt)",
+        "Apical Vertebral Translation (AVT)",
+        "Trunk Shift",
+        "Coronal Balance",
+        "AO Spine Deformity Classification",
+        "T4 Pelvic Angle (T4PA)",
+        "T1 Pelvic Angle (T1PA)",
+        "Side-bending Films (Coronal flexibility)",
+        "L1 Pelvic Angle (L1PA)",
+        "Sagittal Vertical Axis (SVA)",
+        "Cobb Angle",
+        "Apical Vertebral Rotation (AVR) - Nash-Moe classification"
+      ]
+    },
     "CT Scan": {
-       "path":"/resources/full/ct/"
-     },
+      "path": "/resources/full/ct/",
+      "content": []
+    },
     "MRI Scan": {
-       "path":"/resources/full/mri/"
-     }
+      "path": "/resources/full/mri/",
+      "content": [
+        "Lipoma or Dermal Sinus Tract",
+        "Conus Medullaris Level and Filum Terminale Thickness (Tethered Cord)",
+        "Syringomyelia",
+        "Diastematomyelia",
+        "Rib-Vertebra Angle Difference (RVAD)",
+        "Block Vertebra Assessment (fusion length and canal dimensions)",
+        "Hemivertebra Morphometry (wedge angle, segmentation)",
+        "Chiari malformation"
+      ]
+    }
   },
-
   "Lumbar Spine": {
     "X-Ray": {
-       "path":"/resources/lumbar/xray/"
-     },
+      "path": "/resources/lumbar/xray/",
+      "content": [
+        "Disc Height Index (DHI)",
+        "Sacral Slope (SS)",
+        "Mcnab\u2019s Line",
+        "Translation",
+        "Ullman\u2019s Line",
+        "PI-LL Mismatch",
+        "Lumbar Lordosis",
+        "Canal Compromise Percentage",
+        "Ferguson\u2019s Line",
+        "Pelvic Tilt (PT)",
+        "George\u2019s Line (Posterior Vertebral Body Line)",
+        "Segmental Lordosis",
+        "Pelvic Incidence",
+        "Lumbosacral Angle (Ferguson\u2019s Angle-Sacral Inclination)",
+        "Slip Angle-Lumbosacral Kyphosis",
+        "Boxall\u2019s Angle (Sacral Inclination)",
+        "Pelvic Incidence-Slip Angle Relationship",
+        "Angulation (segmental rotation)",
+        "Meyerding Classification"
+      ]
+    },
     "CT Scan": {
-       "path":"/resources/lumbar/ct/"
-     },
+      "path": "/resources/lumbar/ct/",
+      "content": [
+        "Facet Join Orientation and Tropism",
+        "Sagittal Index (Anterior-Posterior Height Ratio)",
+        "Anteroposterior (AP) Canal Diameter",
+        "Sacral Morphometry",
+        "Axial Rotation",
+        "Pedicle Dimensions",
+        "Vertebral Body Dimensions",
+        "Pars Interarticularis Defects",
+        "Apical Vertebral Translation (AVT)",
+        "Lateral Recess Depth-Width",
+        "Kyphotic Angle",
+        "Cross-Sectional Area of Canal (CSA)",
+        "Foraminal Width - Height",
+        "Interpedicular Distance"
+      ]
+    },
     "MRI Scan": {
-       "path":"/resources/lumbar/mri/"
-     }
+      "path": "/resources/lumbar/mri/",
+      "content": [
+        "Disc Herniation Size",
+        "Dural Sac CSA",
+        "Anteroposterior (AP) Canal Diameter",
+        "Cross-Sectional Area (CSA) of Spinal Canal",
+        "Vertebral Bone Quality (VBQ) Score",
+        "Conus Medullaris Level",
+        "Vertebral Endplate Defects",
+        "High-intensity Zone (HIZ)",
+        "Modic Endplate Changes (Type I, II, III)",
+        "Filum Terminale Thickness",
+        "Epidural Fat Thickness",
+        "Foraminal Height and Width",
+        "Marrow Signal Changes",
+        "Disc-Height Index (DHI)",
+        "Pfirrmann Classification (I-V)",
+        "Cauda Equina Nerve Root Area",
+        "Lateral Recess Width-Depth"
+      ]
+    }
   }
 }
