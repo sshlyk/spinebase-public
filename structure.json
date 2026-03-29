@@ -21,7 +21,10 @@
         "Sagittal Vertical Axis (SVA)",
         "Angulation",
         "George\u2019s Line (Posterior Cervical Line)",
-        "Sagittal Canal Diameter"
+        "Sagittal Canal Diameter",
+        "K-Line",
+        "OC2 Angle (Occiput\u2013C2 Angle)",
+        "T1 Slope (T1S)"
       ]
     },
     "CT Scan": {
@@ -39,7 +42,8 @@
         "Basion\u2013Dens Interval (BDI)",
         "Atlantodental Interval (ADI)",
         "Basion\u2013Axial Interval (BAI)",
-        "Sagittal Vertical Axis (SVA)"
+        "Sagittal Vertical Axis (SVA)",
+        "Canal Occupying Ratio (COR)"
       ]
     },
     "MRI Scan": {
@@ -166,7 +170,8 @@
         "Disc-Height Index (DHI)",
         "Pfirrmann Classification (I-V)",
         "Cauda Equina Nerve Root Area",
-        "Lateral Recess Width-Depth"
+        "Lateral Recess Width-Depth",
+        "Lumbar Disc Herniation \u2013Zone Classification (Central, Paracentral, Foraminal, Extraforaminal)"
       ]
     }
   }
