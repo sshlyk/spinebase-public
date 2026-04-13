@@ -3,6 +3,7 @@
     "X-Ray": {
       "path": "/resources/cervical/xray/",
       "content": [
+        "C2 slope",
         "Spinolaminar line",
         "Swischuk Line",
         "Posterior Atlantodental Interval (PADI)",
